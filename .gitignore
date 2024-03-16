@@ -1,9 +1,9 @@
 # Gradle files
-<<<<<<< HEAD
+
 .gradle/
-=======
+
 ../../../alexshirkovetskodetrainee2024/.gradle/
->>>>>>> 2c0b95c (added tub scroll)
+
 build/
 
 # Local configuration file (sdk path, etc)
