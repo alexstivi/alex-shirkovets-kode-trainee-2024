@@ -1,29 +1,51 @@
 package com.example.alex_shirkovets_kode_trainee_2024.Presentaion
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
+
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -51,26 +73,43 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Composable
 fun StartScreen() {
     Column {
-        Spacer(modifier = Modifier.padding(all = 20.dp))
         TopAppBar()
-        Greeting("Designers")
         EmployeesList(EmployeesNamesSampleData.employees )
+    }
+}
+@Composable
+fun SearchBar() {
+    var text by rememberSaveable { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp)
+    ) {
+
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Введите имя, тэг, почту...")},
+            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Localized description") },
+            trailingIcon = { Icon(Icons.Filled.Menu, contentDescription = "Localized description") },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                }
+            )
+        )
     }
 }
 
 @Composable
 fun NavigationalBar(names: List<DepartmentName>) {
-    LazyRow {
+    LazyRow(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         items(names) { name ->
             DepartmentNameTab(name)
         }
@@ -89,23 +128,29 @@ fun EmployeesList(names: List<EmployeeInfo>) {
 @Composable
 fun TopAppBar() {
     Column {
-        Text("TOP")
-        Text("ПОИСК")
+        SearchBar()
         NavigationalBar(DepartmentsNamesSampleData.depNamesSample)
     }
 }
 @Composable
 fun DepartmentNameTab(tab: DepartmentName) {
-    Text(
-        text = tab.name, Modifier
-            //.clickable(onClick = onClick)
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-    )
+    Column {
+        Text(
+            text = tab.name, Modifier
+                //.clickable(onClick = onClick)
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        )
+        Spacer(modifier = Modifier
+            .width(10.dp)
+            .height(4.dp)
+            .border(BorderStroke(width = 1.dp, color = Color.DarkGray), RectangleShape)
+        )
+    }
 
 }
 @Composable
 fun EmployeesShortInfo(employee: EmployeeInfo) {
-    Row(modifier = Modifier.padding(all = 8.dp)) {
+    Row() {
 
         AsyncImage(
             model = employee.avatarUrl,
@@ -118,7 +163,7 @@ fun EmployeesShortInfo(employee: EmployeeInfo) {
                 .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
 
-        Spacer(modifier = Modifier.width(8.dp))
+        //Spacer(modifier = Modifier.width(8.dp))
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row {
@@ -138,7 +183,7 @@ fun EmployeesShortInfo(employee: EmployeeInfo) {
                     text = employee.userTag,
                     modifier = Modifier.padding(all = 4.dp),
                     color = MaterialTheme.colorScheme.onSecondary,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
 
