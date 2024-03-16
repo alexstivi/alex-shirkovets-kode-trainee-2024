@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024
+package com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models
 
 object DepartmentsNamesSampleData {
     val depNamesSample = listOf(

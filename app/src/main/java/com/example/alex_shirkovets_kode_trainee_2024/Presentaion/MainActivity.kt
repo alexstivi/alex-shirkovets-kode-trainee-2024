@@ -1,9 +1,8 @@
-package com.example.alex_shirkovets_kode_trainee_2024
+package com.example.alex_shirkovets_kode_trainee_2024.Presentaion
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,11 +22,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.alex_shirkovets_kode_trainee_2024.ui.theme.Alexshirkovetskodetrainee2024Theme
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.DepartmentName
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.DepartmentsNamesSampleData
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.EmployeeInfo
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.EmployeesNamesSampleData
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.theme.Alexshirkovetskodetrainee2024Theme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +61,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun StartScreen() {
     Column {
-
         Spacer(modifier = Modifier.padding(all = 20.dp))
         TopAppBar()
         Greeting("Designers")
@@ -66,14 +69,13 @@ fun StartScreen() {
 }
 
 @Composable
-fun ContentTab(names: List<DepartmentName>) {
+fun NavigationalBar(names: List<DepartmentName>) {
     LazyRow {
         items(names) { name ->
             DepartmentNameTab(name)
         }
     }
 }
-
 
 @Composable
 fun EmployeesList(names: List<EmployeeInfo>) {
@@ -84,21 +86,14 @@ fun EmployeesList(names: List<EmployeeInfo>) {
     }
 }
 
-
-
-
-
 @Composable
 fun TopAppBar() {
     Column {
         Text("TOP")
         Text("ПОИСК")
-        ContentTab(DepartmentsNamesSampleData.depNamesSample)
+        NavigationalBar(DepartmentsNamesSampleData.depNamesSample)
     }
 }
-
-data class DepartmentName(val name: String)
-
 @Composable
 fun DepartmentNameTab(tab: DepartmentName) {
     Text(
@@ -106,23 +101,12 @@ fun DepartmentNameTab(tab: DepartmentName) {
             //.clickable(onClick = onClick)
             .padding(horizontal = 12.dp, vertical = 8.dp)
     )
+
 }
-
-data class EmployeeInfo(
-    val id: String,
-    val avatarUrl: String,
-    val firstName: String,
-    val lastName: String,
-    val userTag: String,
-    val department: String,
-    val position: String,
-    val birthday: String,
-    val phone: String
-)
-
 @Composable
 fun EmployeesShortInfo(employee: EmployeeInfo) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
+
 
         AsyncImage(
             model = employee.avatarUrl,
@@ -135,17 +119,9 @@ fun EmployeesShortInfo(employee: EmployeeInfo) {
                 .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
 
-
         Spacer(modifier = Modifier.width(8.dp))
 
-
-
-
-
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-
+        Column(modifier = Modifier.padding(16.dp)) {
             Row {
                 Text(
                     text = employee.firstName,
@@ -153,14 +129,12 @@ fun EmployeesShortInfo(employee: EmployeeInfo) {
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.headlineMedium
                 )
-
                 Text(
                     text = employee.lastName,
                     modifier = Modifier.padding(all = 4.dp),
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.headlineMedium
                 )
-
                 Text(
                     text = employee.userTag,
                     modifier = Modifier.padding(all = 4.dp),
