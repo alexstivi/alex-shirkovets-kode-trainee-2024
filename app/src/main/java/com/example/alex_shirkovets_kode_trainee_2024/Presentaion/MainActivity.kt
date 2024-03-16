@@ -107,7 +107,6 @@ fun DepartmentNameTab(tab: DepartmentName) {
 fun EmployeesShortInfo(employee: EmployeeInfo) {
     Row(modifier = Modifier.padding(all = 8.dp)) {
 
-
         AsyncImage(
             model = employee.avatarUrl,
             contentDescription = null,
