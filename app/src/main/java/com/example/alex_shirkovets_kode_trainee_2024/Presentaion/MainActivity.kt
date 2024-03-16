@@ -2,6 +2,7 @@ package com.example.alex_shirkovets_kode_trainee_2024.Presentaion
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -35,6 +36,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -54,13 +56,17 @@ import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.Departme
 import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.EmployeeInfo
 import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.EmployeesNamesSampleData
 import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.theme.Alexshirkovetskodetrainee2024Theme
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             Alexshirkovetskodetrainee2024Theme {
-                // A surface container using the 'background' color from the theme
+
+                SetStatusBarColor(color = MaterialTheme.colorScheme.background)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -79,9 +85,19 @@ fun StartScreen() {
         EmployeesList(EmployeesNamesSampleData.employees )
     }
 }
+
+@Composable
+fun SetStatusBarColor(color: Color) {
+
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(color)
+    }
+}
 @Composable
 fun SearchBar() {
-    var text by rememberSaveable { mutableStateOf("") }
+    var input by rememberSaveable { mutableStateOf("") }
+
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Surface(
@@ -92,9 +108,11 @@ fun SearchBar() {
     ) {
 
         TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Введите имя, тэг, почту...")},
+            value = input,
+            onValueChange = { newText ->
+                input = newText.trimStart { it == '0' }
+            },
+            label = { Text("Введите имя, тэг, почту...") },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Localized description") },
             trailingIcon = { Icon(Icons.Filled.Menu, contentDescription = "Localized description") },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -128,6 +146,7 @@ fun EmployeesList(names: List<EmployeeInfo>) {
 @Composable
 fun TopAppBar() {
     Column {
+        Spacer(modifier = Modifier.height(40.dp))
         SearchBar()
         NavigationalBar(DepartmentsNamesSampleData.depNamesSample)
     }
