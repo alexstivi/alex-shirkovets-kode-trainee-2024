@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.Presentaion.theme
+package com.example.alex_shirkovets_kode_trainee_2024.Presentation.theme.ui
 
 import android.app.Activity
 import android.os.Build
@@ -17,21 +17,22 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = Color.White,
+    secondary = SubTitle,
+    tertiary = SearchTextFieldColor,
+    onPrimary = MiddleTitle,
     onSurface = MiddleTitle,
     onSecondary = MiddleMeta,
-    onTertiary = SubTitle
+    onTertiary = SearchTextFieldContent
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+    primary = MiddleTitle,
+    secondary = MiddleMeta,
+    tertiary = SearchTextFieldColor,
     onSurface = MiddleTitle,
     onSecondary = MiddleMeta,
-    onTertiary = SubTitle
+    onTertiary = SearchTextFieldContent
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -56,7 +57,8 @@ fun Alexshirkovetskodetrainee2024Theme(
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) dynamicDarkColorScheme(LocalContext.current)
+            else dynamicLightColorScheme(LocalContext.current)
         }
 
         darkTheme -> DarkColorScheme

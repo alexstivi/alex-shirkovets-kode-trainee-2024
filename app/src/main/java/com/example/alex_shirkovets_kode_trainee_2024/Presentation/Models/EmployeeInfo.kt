@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models
+package com.example.alex_shirkovets_kode_trainee_2024.Presentation.Models
 
 class EmployeeInfo (
     val id: String,
