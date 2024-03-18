@@ -38,7 +38,7 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
-    subheadMedium = TextStyle (
+    headlineSmall = TextStyle (
 
     //styleName: Subhead Medium;
 
@@ -49,7 +49,7 @@ val Typography = Typography(
     letterSpacing = 0.sp
     ),
 
-    captionRegular = TextStyle(
+    headlineLarge = TextStyle(
             fontFamily = InterFontFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 14.sp,
