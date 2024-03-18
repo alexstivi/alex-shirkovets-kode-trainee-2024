@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.Presentation
+package com.example.alex_shirkovets_kode_trainee_2024.presentation
 
 
 import android.os.Bundle
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,7 +23,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 
 import androidx.compose.material.icons.filled.Menu
@@ -37,7 +35,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -58,12 +55,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.alex_shirkovets_kode_trainee_2024.Presentation.Models.DepartmentsNamesMapSampleData.depNamesMapSample
-import com.example.alex_shirkovets_kode_trainee_2024.Presentation.Models.DepartmentsNamesSampleData.depNamesSample
-import com.example.alex_shirkovets_kode_trainee_2024.Presentation.Models.EmployeeInfo
-import com.example.alex_shirkovets_kode_trainee_2024.Presentation.Models.EmployeesNamesSampleData
-import com.example.alex_shirkovets_kode_trainee_2024.Presentation.theme.ui.Alexshirkovetskodetrainee2024Theme
-import com.example.alex_shirkovets_kode_trainee_2024.Presentation.theme.ui.InterFontFamily
+import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.GetTabSortedListUseCase
+import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.LoadActualListUseCase
+import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.models.Employee
+import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.DepartmentsNamesMapSampleData.depNamesMapSample
+import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.DepartmentsNamesSampleData.depNamesSample
+import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.EmployeeInfo
+import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.EmployeesNamesSampleData
+import com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui.Alexshirkovetskodetrainee2024Theme
+import com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui.InterFontFamily
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -85,11 +85,18 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+val loadActualListUseCase = LoadActualListUseCase()
+val actualList = loadActualListUseCase.execute()
+
 @Composable
 fun StartScreen() {
+
+
+
     Column {
         TopAppBar()
-        EmployeesList(EmployeesNamesSampleData.employees )
+        DepartmentNameTab()
+        EmployeesList(actualList)
     }
 }
 
@@ -142,8 +149,9 @@ fun SearchBar() {
 
 
 
+
 @Composable
-fun EmployeesList(names: List<EmployeeInfo>) {
+fun EmployeesList(names: List<Employee>) {
     LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
         items(names) { name ->
             EmployeesShortInfo(name)
@@ -156,7 +164,7 @@ fun TopAppBar() {
     Column {
         Spacer(modifier = Modifier.height(44.dp))
         SearchBar()
-        DepartmentNameTab()
+
     }
 }
 
@@ -179,7 +187,11 @@ fun DepartmentNameTab() {
     val tabNames = depNamesSample //TODO add actual received deps names
     val tabsMap = depNamesMapSample
     val tabs = mappedList(tabNames, tabsMap)
-    val scrollState = rememberScrollState()
+
+    val selectedTubName: String = tabs[tabIndex]
+
+    val getTabSortedListUseCase = GetTabSortedListUseCase()
+    val tabSortedList = getTabSortedListUseCase.execute(selectedTubName, actualList)
 
     Surface(
         shape = MaterialTheme.shapes.large,
@@ -189,8 +201,7 @@ fun DepartmentNameTab() {
         ScrollableTabRow(
             selectedTabIndex = tabIndex,
             modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(scrollState),
+                .fillMaxWidth(),
             edgePadding = 16.dp,
         ) {
             tabs.forEachIndexed { index, title ->
@@ -199,10 +210,13 @@ fun DepartmentNameTab() {
                     selected = tabIndex == index,
                     selectedContentColor = MaterialTheme.colorScheme.onSurface,
                     unselectedContentColor = MaterialTheme.colorScheme.onSecondary,
-                    onClick = { tabIndex = index },
+                    onClick = { tabIndex = index
+                              }
                 )
             }
         }
+
+
     }
 
     /*
@@ -219,7 +233,7 @@ fun DepartmentNameTab() {
 }
 
 @Composable
-fun EmployeesShortInfo(employee: EmployeeInfo) {
+fun EmployeesShortInfo(employee: Employee) {
 
     val scrollState = rememberScrollState()
 

@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.Domain.UseCase.Models
+package com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.models
 
 data class Employee (
         val id: String,

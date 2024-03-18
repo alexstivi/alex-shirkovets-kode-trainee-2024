@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.Presentation.theme.ui
+package com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -38,7 +38,7 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
-    subheadMedium = TextStyle (
+    headlineSmall = TextStyle (
 
     //styleName: Subhead Medium;
 
@@ -49,7 +49,7 @@ val Typography = Typography(
     letterSpacing = 0.sp
     ),
 
-    captionRegular = TextStyle(
+    headlineLarge = TextStyle(
             fontFamily = InterFontFamily,
     fontWeight = FontWeight.Medium,
     fontSize = 14.sp,

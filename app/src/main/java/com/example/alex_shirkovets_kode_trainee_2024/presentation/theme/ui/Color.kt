@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.Presentation.theme.ui
+package com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui
 
 import androidx.compose.ui.graphics.Color
 
