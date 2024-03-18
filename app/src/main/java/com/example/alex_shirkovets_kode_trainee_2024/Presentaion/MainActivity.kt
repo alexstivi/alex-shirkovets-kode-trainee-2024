@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.magnifier
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -31,32 +30,33 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ScrollableTabRow
 
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.DepartmentName
-import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.DepartmentsNamesSampleData
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.DepartmentsNamesMapSampleData.depNamesMapSample
+import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.DepartmentsNamesSampleData.depNamesSample
 import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.EmployeeInfo
 import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.Models.EmployeesNamesSampleData
 import com.example.alex_shirkovets_kode_trainee_2024.Presentaion.theme.Alexshirkovetskodetrainee2024Theme
-import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -125,14 +125,7 @@ fun SearchBar() {
     }
 }
 
-@Composable
-fun NavigationalBar(names: List<DepartmentName>) {
-    LazyRow(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-        items(names) { name ->
-            DepartmentNameTab(name)
-        }
-    }
-}
+
 
 @Composable
 fun EmployeesList(names: List<EmployeeInfo>) {
@@ -148,24 +141,55 @@ fun TopAppBar() {
     Column {
         Spacer(modifier = Modifier.height(40.dp))
         SearchBar()
-        NavigationalBar(DepartmentsNamesSampleData.depNamesSample)
+        DepartmentNameTab()
     }
 }
-@Composable
-fun DepartmentNameTab(tab: DepartmentName) {
-    Column {
-        Text(
-            text = tab.name, Modifier
-                //.clickable(onClick = onClick)
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        )
-        Spacer(modifier = Modifier
-            .width(10.dp)
-            .height(4.dp)
-            .border(BorderStroke(width = 1.dp, color = Color.DarkGray), RectangleShape)
-        )
-    }
 
+
+@Composable
+fun mappedList (list: List<String>, map: Map<String, String>) : List<String> {
+    val myMutable = mutableListOf("Все")
+    for (names in list) {
+        val key: String? = map[names]
+        if (key != null) {
+            myMutable.add(key)
+        }
+    }
+    return myMutable
+}
+
+@Composable
+fun DepartmentNameTab() {
+    var tabIndex by remember { mutableStateOf(0) }
+    val tabNames = depNamesSample //TODO add actual received deps names
+    val tabsMap = depNamesMapSample
+    val tabs = mappedList(tabNames, tabsMap)
+
+
+    Column {
+        ScrollableTabRow(selectedTabIndex = tabIndex) {
+            tabs.forEachIndexed { index, title ->
+                Tab(
+                    text = { Text(title) },
+                    selected = tabIndex == index,
+                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSecondary,
+                    onClick = { tabIndex = index },
+                )
+            }
+        }
+        /*
+        when (tabIndex) {
+            0 -> HomeScreen()
+            1 -> AboutScreen()
+            2 -> SettingsScreen()
+            3 -> MoreScreen()
+            4 -> SomethingScreen()
+            5 -> EverythingScreen()
+        }
+    }
+*/
+    }
 }
 @Composable
 fun EmployeesShortInfo(employee: EmployeeInfo) {
