@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,6 +37,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -57,11 +57,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.GetTabSortedListUseCase
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.LoadActualListUseCase
+import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.GetMappedListUseCase
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.models.Employee
 import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.DepartmentsNamesMapSampleData.depNamesMapSample
 import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.DepartmentsNamesSampleData.depNamesSample
-import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.EmployeeInfo
-import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.EmployeesNamesSampleData
 import com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui.Alexshirkovetskodetrainee2024Theme
 import com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui.InterFontFamily
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -88,15 +87,25 @@ class MainActivity : ComponentActivity() {
 val loadActualListUseCase = LoadActualListUseCase()
 val actualList = loadActualListUseCase.execute()
 
+
+val getMappedListUseCase = GetMappedListUseCase()
+
+
+val tabNames = depNamesSample //TODO add actual received deps names
+val tabsMap = depNamesMapSample
+
+//val tabs = mappedList(tabNames, tabsMap)
+
 @Composable
 fun StartScreen() {
 
+    val tabs = getMappedListUseCase.execute(list = tabNames, map = tabsMap)
 
 
     Column {
         TopAppBar()
-        DepartmentNameTab()
-        EmployeesList(actualList)
+        EmployeeslistPresentation(tabs = tabs)
+
     }
 }
 
@@ -147,9 +156,6 @@ fun SearchBar() {
     }
 }
 
-
-
-
 @Composable
 fun EmployeesList(names: List<Employee>) {
     LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
@@ -170,31 +176,12 @@ fun TopAppBar() {
 
 
 @Composable
-fun mappedList (list: List<String>, map: Map<String, String>) : List<String> {
-    val myMutable = mutableListOf("Все")
-    for (names in list) {
-        val key: String? = map[names]
-        if (key != null) {
-            myMutable.add(key)
-        }
-    }
-    return myMutable
-}
+fun EmployeeslistPresentation(tabs: List<String>) {
+    var tabIndex by remember { mutableIntStateOf(0) }
+    val selectedTab = tabNames[tabIndex]
+    val getTabFilteredListUseCase = GetTabSortedListUseCase().execute(selectedTab, actualList)
 
-@Composable
-fun DepartmentNameTab() {
-    var tabIndex by remember { mutableStateOf(0) }
-    val tabNames = depNamesSample //TODO add actual received deps names
-    val tabsMap = depNamesMapSample
-    val tabs = mappedList(tabNames, tabsMap)
-
-    val selectedTubName: String = tabs[tabIndex]
-
-    val getTabSortedListUseCase = GetTabSortedListUseCase()
-    val tabSortedList = getTabSortedListUseCase.execute(selectedTubName, actualList)
-
-    Surface(
-        shape = MaterialTheme.shapes.large,
+    Column(
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -210,27 +197,22 @@ fun DepartmentNameTab() {
                     selected = tabIndex == index,
                     selectedContentColor = MaterialTheme.colorScheme.onSurface,
                     unselectedContentColor = MaterialTheme.colorScheme.onSecondary,
-                    onClick = { tabIndex = index
-                              }
+                    onClick = { tabIndex = index }
                 )
             }
         }
 
 
+        EmployeesList(
+            names = when {
+                tabIndex == 0 -> actualList
+                else -> getTabFilteredListUseCase
+            }
+        )
     }
 
-    /*
-    when (tabIndex) {
-        0 -> HomeScreen()
-        1 -> AboutScreen()
-        2 -> SettingsScreen()
-        3 -> MoreScreen()
-        4 -> SomethingScreen()
-        5 -> EverythingScreen()
-    }
 }
-*/
-}
+
 
 @Composable
 fun EmployeesShortInfo(employee: Employee) {
