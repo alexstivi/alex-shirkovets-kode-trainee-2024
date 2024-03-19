@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ScrollableTabRow
 
 import androidx.compose.material3.Surface
@@ -51,10 +52,12 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.GetFilteredListUseCase
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.GetTabSortedListUseCase
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.LoadActualListUseCase
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.GetMappedListUseCase
@@ -89,12 +92,10 @@ val actualList = loadActualListUseCase.execute()
 
 
 val getMappedListUseCase = GetMappedListUseCase()
-
+val getFilteredListUseCase = GetFilteredListUseCase()
 
 val tabNames = depNamesSample //TODO add actual received deps names
 val tabsMap = depNamesMapSample
-
-//val tabs = mappedList(tabNames, tabsMap)
 
 @Composable
 fun StartScreen() {
@@ -117,44 +118,6 @@ fun SetStatusBarColor(color: Color) {
         systemUiController.setSystemBarsColor(color)
     }
 }
-@Composable
-fun SearchBar() {
-    var input by rememberSaveable { mutableStateOf("") }
-
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    Surface(
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
-    ) {
-
-        TextField(
-            value = input,
-            onValueChange = { newText ->
-                input = newText.trimStart { it == '0' }
-            },
-            textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onTertiary,
-                fontSize = 15.sp,
-                fontFamily = InterFontFamily,
-                fontWeight = FontWeight.W500,
-                fontStyle = FontStyle.Normal,
-            )
-            ,
-            label = { Text("Введите имя, тэг, почту...") },
-            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = "Localized description") },
-            trailingIcon = { Icon(Icons.Filled.Menu, contentDescription = "Localized description") },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    keyboardController?.hide()
-                }
-            )
-        )
-    }
-}
 
 @Composable
 fun EmployeesList(names: List<Employee>) {
@@ -169,47 +132,85 @@ fun EmployeesList(names: List<Employee>) {
 fun TopAppBar() {
     Column {
         Spacer(modifier = Modifier.height(44.dp))
-        SearchBar()
-
     }
 }
 
-
 @Composable
 fun EmployeeslistPresentation(tabs: List<String>) {
-    var tabIndex by remember { mutableIntStateOf(0) }
+    var tabIndex by rememberSaveable { mutableIntStateOf(0) }
     val selectedTab = tabNames[tabIndex]
     val getTabFilteredListUseCase = GetTabSortedListUseCase().execute(selectedTab, actualList)
+    val textState = remember { mutableStateOf(TextFieldValue()) }
+    val filteredList = getFilteredListUseCase.execute(textState.value.text, actualList)
+    val keyboardController = LocalSoftwareKeyboardController.current
 
-    Column(
+    Surface(
+        //shape = MaterialTheme.shapes.large,
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp)
     ) {
-        ScrollableTabRow(
-            selectedTabIndex = tabIndex,
-            modifier = Modifier
-                .fillMaxWidth(),
-            edgePadding = 16.dp,
-        ) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = tabIndex == index,
-                    selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    unselectedContentColor = MaterialTheme.colorScheme.onSecondary,
-                    onClick = { tabIndex = index }
+        Column {
+            Row {
+                TextField(
+                    //modifier = Modifier
+                    //    .fillMaxWidth(),
+                    value = textState.value,
+                    onValueChange = { textState.value = it },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        fontSize = 15.sp,
+                        fontFamily = InterFontFamily,
+                        fontWeight = FontWeight.W500,
+                        fontStyle = FontStyle.Normal,
+                    ),
+                    label = { Text("Введите имя, тэг, ник...") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Search,
+                            contentDescription = "Localized description"
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            Icons.Filled.Menu,
+                            contentDescription = "Localized description"
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    )
                 )
+                Text ("Oтмена")
             }
+
+            ScrollableTabRow(
+                selectedTabIndex = tabIndex,
+                edgePadding = 16.dp,
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        text = { Text(title) },
+                        selected = tabIndex == index,
+                        selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSecondary,
+                        onClick = { tabIndex = index }
+                    )
+                }
+            }
+
+            EmployeesList(
+                names = when {
+                    tabIndex == 0 -> filteredList
+                    else -> getTabFilteredListUseCase
+                }
+            )
         }
-
-
-        EmployeesList(
-            names = when {
-                tabIndex == 0 -> actualList
-                else -> getTabFilteredListUseCase
-            }
-        )
     }
+
 
 }
 
