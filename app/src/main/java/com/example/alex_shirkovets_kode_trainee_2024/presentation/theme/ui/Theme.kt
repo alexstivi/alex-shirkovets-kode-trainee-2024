@@ -2,6 +2,7 @@ package com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui
 
 import android.app.Activity
 import android.os.Build
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -21,18 +22,18 @@ private val DarkColorScheme = darkColorScheme(
     secondary = SubTitle,
     tertiary = SearchTextFieldColor,
     onPrimary = MiddleTitle,
-    onSurface = MiddleTitle,
     onSecondary = MiddleMeta,
-    onTertiary = SearchTextFieldContent
+    onTertiary = SearchTextFieldContent,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = MiddleTitle,
-    secondary = MiddleMeta,
+    primary = Color.White,
+    secondary = SubTitle,
     tertiary = SearchTextFieldColor,
     onSurface = MiddleTitle,
     onSecondary = MiddleMeta,
-    onTertiary = SearchTextFieldContent
+    onTertiary = SearchTextFieldContent,
+    background = Color(0xFFFFFFFF),
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

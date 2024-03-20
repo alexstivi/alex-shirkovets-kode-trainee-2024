@@ -5,6 +5,7 @@ import android.telephony.PhoneNumberUtils
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
@@ -48,10 +49,7 @@ import java.util.Locale
 @Composable
 fun EmployeeFullInfo(employee: Employee) {
 
-    Column(
-        /*        modifier = Modifier
-                    .fillMaxSize()*/
-    ) {
+    Column {
 
         Spacer(
             modifier = Modifier
@@ -64,8 +62,8 @@ fun EmployeeFullInfo(employee: Employee) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.onTertiary)
-                , contentAlignment = Alignment.Center
+                    .background(MaterialTheme.colorScheme.onTertiary),
+                contentAlignment = Alignment.Center
             ) {
 
                 AsyncImage(
@@ -108,7 +106,7 @@ fun EmployeeFullInfo(employee: Employee) {
                         text = employee.userTag.lowercase(),
                         modifier = Modifier.padding(all = 4.dp),
                         style = TextStyle(
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onErrorContainer,
                             fontSize = 17.sp,
                             fontFamily = InterFontFamily,
                             fontWeight = FontWeight.W400,
@@ -123,7 +121,8 @@ fun EmployeeFullInfo(employee: Employee) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.onTertiary), contentAlignment = Alignment.Center
+                    .background(MaterialTheme.colorScheme.onTertiary),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = employee.position,
@@ -140,9 +139,13 @@ fun EmployeeFullInfo(employee: Employee) {
             }
         }
 
-        Column(modifier = Modifier.padding(16.dp).background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 val birthDate = LocalDate.parse(employee.birthday)
                 val currentDate = LocalDate.now()
 
@@ -150,14 +153,16 @@ fun EmployeeFullInfo(employee: Employee) {
 
 
 
-                Box(modifier = Modifier.weight(0.4f)) {
+                Box(
+                    modifier = Modifier.weight(0.4f),
+                    contentAlignment = Alignment.Center
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.vector),
                         contentDescription = "",
                         modifier = Modifier
-                            .size(20.dp)
+                            .size(24.dp)
                             .clip(CircleShape)
-                            .padding()
                     )
                 }
 
@@ -167,8 +172,16 @@ fun EmployeeFullInfo(employee: Employee) {
                             + " " + birthDate.year.toString(),
                     modifier = Modifier
                         .weight(4f)
-                        .padding(vertical = 12.dp),
+                        .padding(vertical = 12.dp, horizontal = 12.dp),
                     textAlign = TextAlign.Left,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 16.sp,
+                        fontFamily = InterFontFamily,
+                        fontWeight = FontWeight.W500,
+                        fontStyle = FontStyle.Normal,
+                        lineHeight = 20.sp
+                    )
                 )
 
                 Text(
@@ -177,22 +190,50 @@ fun EmployeeFullInfo(employee: Employee) {
                         .weight(1f)
                         .padding(vertical = 12.dp),
                     textAlign = TextAlign.Right,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = 16.sp,
+                        fontFamily = InterFontFamily,
+                        fontWeight = FontWeight.W500,
+                        fontStyle = FontStyle.Normal,
+                        lineHeight = 20.sp
+                    )
                 )
             }
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 val unformattedPhone = employee.phone
-                val formattedNumber = PhoneNumberUtils.formatNumber(unformattedPhone);
 
-                Text(text = "Icon")
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.phone_icon),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding()
+                    )
+                }
 
                 Text(
                     text = PhoneNumberUtils.formatNumber(
                         employee.phone,
                         Locale.getDefault().country
-                    )
+                    ),
+                    textAlign = TextAlign.Left,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 16.sp,
+                        fontFamily = InterFontFamily,
+                        fontWeight = FontWeight.W500,
+                        fontStyle = FontStyle.Normal,
+                        lineHeight = 20.sp
+                    ),
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
+
                 )
             }
         }
