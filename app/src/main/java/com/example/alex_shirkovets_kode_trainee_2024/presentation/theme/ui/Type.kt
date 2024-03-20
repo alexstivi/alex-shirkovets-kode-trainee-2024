@@ -24,7 +24,9 @@ val InterFontFamily = FontFamily(
     Font(googleFont = Inter, fontProvider = provider),
     Font(resId = R.font.inter_medium, weight = FontWeight.Medium),
     Font(googleFont = Inter, fontProvider = provider),
-    Font(resId = R.font.inter_semibold, weight = FontWeight.SemiBold)
+    Font(resId = R.font.inter_semibold, weight = FontWeight.SemiBold),
+    //Font(googleFont = Inter, fontProvider = provider),
+    //Font(resId = R.font.inter_bold, weight = FontWeight.Bold)
 )
 
 // Set of Material typography styles to start with

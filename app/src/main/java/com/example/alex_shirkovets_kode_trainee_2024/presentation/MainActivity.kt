@@ -18,22 +18,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.ScrollableTabRow
-
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -50,7 +48,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,12 +85,10 @@ class MainActivity : ComponentActivity() {
 }
 
 val loadActualListUseCase = LoadActualListUseCase()
-val actualList = loadActualListUseCase.execute()
-
-
 val getMappedListUseCase = GetMappedListUseCase()
 val getFilteredListUseCase = GetFilteredListUseCase()
 
+val actualList = loadActualListUseCase.execute()
 val tabNames = depNamesSample //TODO add actual received deps names
 val tabsMap = depNamesMapSample
 
@@ -101,7 +96,6 @@ val tabsMap = depNamesMapSample
 fun StartScreen() {
 
     val tabs = getMappedListUseCase.execute(list = tabNames, map = tabsMap)
-
 
     Column {
         TopAppBar()
@@ -153,6 +147,9 @@ fun EmployeeslistPresentation(tabs: List<String>) {
         Column {
             Row {
                 TextField(
+                    modifier = Modifier.clip(
+                        RoundedCornerShape(22.dp)
+                    ),
                     //modifier = Modifier
                     //    .fillMaxWidth(),
                     value = textState.value,
@@ -182,9 +179,16 @@ fun EmployeeslistPresentation(tabs: List<String>) {
                         onDone = {
                             keyboardController?.hide()
                         }
+
+
                     )
                 )
-                Text ("Oтмена")
+                TextButton(onClick = { }) {
+                    Text(
+                        text = "Oтмена",
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 11.dp)
+                    )
+                }
             }
 
             ScrollableTabRow(
@@ -210,17 +214,12 @@ fun EmployeeslistPresentation(tabs: List<String>) {
             )
         }
     }
-
-
 }
-
 
 @Composable
 fun EmployeesShortInfo(employee: Employee) {
 
-    val scrollState = rememberScrollState()
-
-    Row() {
+    Row {
 
         AsyncImage(
             model = employee.avatarUrl,
@@ -232,8 +231,6 @@ fun EmployeesShortInfo(employee: Employee) {
                 .clip(CircleShape)
                 .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
-
-        //Spacer(modifier = Modifier.width(8.dp))
 
         Column(modifier = Modifier.padding(16.dp)) {
             Row {
@@ -270,7 +267,7 @@ fun EmployeesShortInfo(employee: Employee) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun EmployeeInfoPreview() {
     Alexshirkovetskodetrainee2024Theme {
         StartScreen()
     }
