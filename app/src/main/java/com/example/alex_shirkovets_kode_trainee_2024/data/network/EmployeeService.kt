@@ -1,17 +1,14 @@
 package com.example.alex_shirkovets_kode_trainee_2024.data.network
 
-import com.example.alex_shirkovets_kode_trainee_2024.data.Employee
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
-import retrofit2.http.Query
 
 interface EmployeeService {
-    @Headers(
-        "Accept: application/json, application/xml"
-    )
-    @GET("items")
+
+    @Headers("Accept: application/json, application/xml", "Prefer: code=200, example=success")
+
+    @GET("/mocks/kode-api/trainee-test/331141861/users")
     suspend fun getEmployeesList(
-        @Query("q") searchQuery: String,
-        @Query("maxResults") maxResults: Int
-    ): Employee
+    ): EmploeesList
 }

@@ -2,7 +2,7 @@ package com.example.alex_shirkovets_kode_trainee_2024.data.network
 
 import com.google.gson.annotations.SerializedName
 
-data class Items {
+data class Item (
     @SerializedName("id") val id : String? = null,
     @SerializedName("avatarUrl") val avatarUrl : String? = null,
     @SerializedName("firstName") val firstName : String? = null,
@@ -12,4 +12,4 @@ data class Items {
     @SerializedName("position") val position : String? = null,
     @SerializedName("birthday") val birthday : String? = null,
     @SerializedName("phone") val phone : String? = null
-}
+)
