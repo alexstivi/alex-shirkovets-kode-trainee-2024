@@ -12,9 +12,7 @@ class LoadActualListUseCase {
 
         val booksRepository = container.employeeRepository
 
-        val downloadedList = booksRepository
+        return booksRepository
             .getEmployees()
-
-        return downloadedList
     }
 }

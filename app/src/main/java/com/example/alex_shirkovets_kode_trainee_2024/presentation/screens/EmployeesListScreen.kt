@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.presentation
+package com.example.alex_shirkovets_kode_trainee_2024.presentation.screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -12,32 +12,37 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.alex_shirkovets_kode_trainee_2024.data.Employee
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
 @Composable
-fun EmployeesList(
+fun EmployeesListScreen(
     list: List<Employee>,
     modifier: Modifier
 ) {
-    LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
-
-        itemsIndexed(list) { _, employee ->
-            EmployeesShortInfo(employee, modifier)
+    Column {
+        LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)) {
+            itemsIndexed(list) { _, employee ->
+                EmployeesShortInfo(employee, modifier)
+            }
         }
     }
 }
+
+
 @Composable
 fun EmployeesShortInfo(
     employee: Employee,
-    modifier: Modifier) {
-
-    Row {
-
+    modifier: Modifier
+) {
+    Row() {
         AsyncImage(
             model = employee.avatarUrl,
             contentDescription = null,
@@ -90,5 +95,14 @@ fun EmployeesShortInfo(
     }
 }
 
+
+@Composable
+fun SetStatusBarColor(color: Color) {
+
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(color)
+    }
+}
 
 

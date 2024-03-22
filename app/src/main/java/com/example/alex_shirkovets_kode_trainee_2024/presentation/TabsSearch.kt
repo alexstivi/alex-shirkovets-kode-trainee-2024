@@ -95,7 +95,7 @@ fun EmployeeslistPresentation(tabs: List<String>) {
     var tabIndex by rememberSaveable { mutableIntStateOf(0) }
     val selectedTab = tabNames[tabIndex]
     val actualList = listOf<Employee>()
-    val getTabFilteredListUseCase = GetTabSortedListUseCase().execute(selectedTab, valactualList)
+    val getTabFilteredListUseCase = GetTabSortedListUseCase().execute(selectedTab, val actualList)
     val textState = remember { mutableStateOf(TextFieldValue()) }
     val filteredList = getFilteredListUseCase.execute(textState.value.text, actualList)
     val keyboardController = LocalSoftwareKeyboardController.current

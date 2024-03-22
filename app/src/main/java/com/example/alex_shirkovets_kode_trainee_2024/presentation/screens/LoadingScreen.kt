@@ -1,4 +1,4 @@
-package com.example.alex_shirkovets_kode_trainee_2024.presentation
+package com.example.alex_shirkovets_kode_trainee_2024.presentation.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

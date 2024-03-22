@@ -58,6 +58,8 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.02.02"))
     implementation("androidx.compose.ui:ui")
 
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+
     implementation ("com.squareup.retrofit2:retrofit:2.10.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.10.0")
 

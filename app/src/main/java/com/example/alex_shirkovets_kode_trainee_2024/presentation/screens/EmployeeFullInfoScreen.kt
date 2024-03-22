@@ -1,11 +1,10 @@
-package com.example.alex_shirkovets_kode_trainee_2024.presentation
+package com.example.alex_shirkovets_kode_trainee_2024.presentation.screens
 
 import android.os.Build
 import android.telephony.PhoneNumberUtils
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
 import androidx.compose.foundation.layout.Column
@@ -17,15 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -39,7 +36,6 @@ import coil.compose.AsyncImage
 import com.example.alex_shirkovets_kode_trainee_2024.R
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.models.Employee
 import com.example.alex_shirkovets_kode_trainee_2024.presentation.models.EmployeeSampleData.employeeSample
-import com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui.Alexshirkovetskodetrainee2024Theme
 import com.example.alex_shirkovets_kode_trainee_2024.presentation.theme.ui.InterFontFamily
 import java.time.LocalDate
 import java.time.Period
@@ -47,7 +43,9 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EmployeeFullInfo(employee: Employee) {
+fun EmployeeFullInfoScreen(employee: Employee
+) {
+
 
     Column {
 
@@ -204,7 +202,6 @@ fun EmployeeFullInfo(employee: Employee) {
             Spacer(modifier = Modifier.height(6.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                val unformattedPhone = employee.phone
 
                 Box(
                     contentAlignment = Alignment.Center
@@ -236,6 +233,10 @@ fun EmployeeFullInfo(employee: Employee) {
 
                 )
             }
+            Button(onClick = { TODO() }) {
+                Text(text = "BACK")
+
+            }
         }
     }
 }
@@ -245,7 +246,5 @@ fun EmployeeFullInfo(employee: Employee) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    Alexshirkovetskodetrainee2024Theme {
-        EmployeeFullInfo(employeeSample)
-    }
+    EmployeeFullInfoScreen(employeeSample)
 }

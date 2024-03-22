@@ -1,8 +1,9 @@
 package com.example.alex_shirkovets_kode_trainee_2024.domain.usecase
 
+import com.example.alex_shirkovets_kode_trainee_2024.data.EmployeeRepository
 import com.example.alex_shirkovets_kode_trainee_2024.domain.usecase.models.Employee
 
-class GetFilteredListUseCase {
+class GetFilteredListUseCase() {
 
     private var filteredList:List<Employee> = mutableListOf<Employee>()
 
