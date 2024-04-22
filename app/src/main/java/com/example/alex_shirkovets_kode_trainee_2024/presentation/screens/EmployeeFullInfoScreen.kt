@@ -45,8 +45,6 @@ import java.util.Locale
 @Composable
 fun EmployeeFullInfoScreen(employee: Employee
 ) {
-
-
     Column {
 
         Spacer(
