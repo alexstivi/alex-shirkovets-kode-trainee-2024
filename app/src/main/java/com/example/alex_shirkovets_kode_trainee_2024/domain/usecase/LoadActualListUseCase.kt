@@ -10,9 +10,9 @@ class LoadActualListUseCase {
 
         val container = DefaultAppContainer()
 
-        val booksRepository = container.employeeRepository
+        val employeeRepository = container.employeeRepository
 
-        return booksRepository
+        return employeeRepository
             .getEmployees()
     }
 }

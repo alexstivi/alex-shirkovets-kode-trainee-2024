@@ -30,10 +30,10 @@ fun Tub() {
     val tubTextStyle = TextStyle(
         background = MaterialTheme.colorScheme.background,
         color = MaterialTheme.colorScheme.onSurface,
-        fontStyle = ,
+       /* fontStyle = ,
         fontSize = ,
         fontFamily = ,
-        fontWeight =
+        fontWeight =*/
     )
 
     Box(modifier = Modifier
